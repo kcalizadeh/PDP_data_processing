@@ -9,7 +9,6 @@ import matplotlib.pyplot as plt
 import wordcloud
 import seaborn as sns
 
-
 import plotly.express as px
 from collections import Counter
 
@@ -347,7 +346,6 @@ def nn_setup(x, y, max_length=450, tokenizer_name='nn_model.pkl'):
 def set_early_stop(monitor='val_accuracy',patience=3, restore_best_weights=False):
     args = locals()
     return EarlyStopping(**args)
-
 
 
 
