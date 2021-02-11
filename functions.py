@@ -4,75 +4,6 @@ import numpy as np
 import pickle
 import re
 import json
-import string
-import matplotlib.pyplot as plt
-import wordcloud
-import seaborn as sns
-
-import plotly.express as px
-from collections import Counter
-
-from gensim.models import Word2Vec
-from gensim.utils import simple_preprocess
-from gensim.test.utils import datapath, get_tmpfile
-from gensim.models import KeyedVectors
-from gensim.scripts.glove2word2vec import glove2word2vec
-from gensim.models import Phrases
-from gensim.models.phrases import Phraser
-
-from imblearn.over_sampling import SMOTE
-from imblearn.pipeline import Pipeline
-from imblearn.under_sampling import RandomUnderSampler
-from imblearn.over_sampling import RandomOverSampler
-
-from sklearn.model_selection import train_test_split, GridSearchCV
-from sklearn.base import BaseEstimator, TransformerMixin
-from sklearn.feature_selection import SelectKBest
-from sklearn.preprocessing import KBinsDiscretizer, OneHotEncoder, StandardScaler, LabelEncoder
-from sklearn.metrics import confusion_matrix, plot_confusion_matrix
-from sklearn.ensemble import AdaBoostClassifier, GradientBoostingClassifier
-from sklearn.utils.class_weight import compute_class_weight, compute_sample_weight
-from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier, GradientBoostingClassifier
-from sklearn.naive_bayes import BernoulliNB, BaseEstimator, BaseNB
-from sklearn.linear_model import LogisticRegression
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.metrics import plot_confusion_matrix, classification_report
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.naive_bayes import MultinomialNB
-from sklearn.metrics import accuracy_score
-from sklearn.pipeline import make_pipeline
-
-import lime
-from lime import lime_text
-from lime.lime_text import LimeTextExplainer
-
-import pkg_resources
-
-import nltk 
-nltk.download('stopwords')
-from nltk import sent_tokenize, word_tokenize
-from nltk.corpus import stopwords
-from nltk import FreqDist
-from nltk.stem import WordNetLemmatizer
-from nltk.corpus import wordnet
-from nltk.collocations import *
-from nltk.collocations import BigramAssocMeasures, BigramCollocationFinder
-
-import spacy
-
-from tensorflow.keras.callbacks import EarlyStopping
-from tensorflow.keras.layers import Input, Dense, LSTM, Embedding, GRU
-from tensorflow.keras.layers import Dropout, Activation, Bidirectional, GlobalMaxPool1D
-from tensorflow.keras.models import Sequential
-from tensorflow.keras import initializers, regularizers, constraints, optimizers, layers
-from tensorflow.keras.callbacks import EarlyStopping,ModelCheckpoint
-
-
-from tensorflow.keras.preprocessing import text, sequence
-from tensorflow.keras.utils import to_categorical
-from keras.preprocessing.sequence import pad_sequences
-
-
 
 # gets text from a gutenberg URL
 def get_guten(url):
@@ -189,37 +120,7 @@ def from_raw_to_df(text_dict):
   text_df['school'] = text_dict['school']
   text_df['sentence_str'] = text_df['sentence_spacy'].apply(lambda x: ''.join(list(str(x))))
   return text_df
-  
-def make_word_cloud(text, stopwords=stopwords.words('english')):
-    cloud = wordcloud.WordCloud(width=2000, 
-                            height=1100, 
-                            background_color='#D1D1D1', 
-                            max_words=30, 
-                            stopwords=stopwords, 
-                            color_func=lambda *args, **kwargs: (95,95,95)).generate(text)
-    return cloud
 
-def plot_pretty_cf(predictor, xtest, ytest, cmap='Greys', normalize='true', 
-                   title=None, label_dict={}):
-    fig, ax = plt.subplots(figsize=(8, 8))
-    plot_confusion_matrix(predictor, xtest, ytest, cmap=cmap, normalize=normalize, ax=ax)
-    ax.set_title(title, size='xx-large', pad=20, fontweight='bold')
-    if label_dict != {}:
-      ax.set_xticklabels([label_dict[int(x.get_text())] for x in ax.get_xticklabels()], rotation=35)
-      ax.set_yticklabels([label_dict[int(x.get_text())] for x in ax.get_yticklabels()])
-    else: 
-      ax.set_xticklabels([str(x).replace('_', ' ').title()[12:-2] for x in ax.get_xticklabels()], rotation=35)
-      ax.set_yticklabels([str(x).replace('_', ' ').title()[12:-2] for x in ax.get_yticklabels()])
-    ax.set_xlabel('Predicted Label', size='x-large')
-    ax.set_ylabel('True Label', size='x-large')
-    plt.show()
-
-def classify_text(to_classify, model, vectorizer, verbose=5):
-    predictor_pipeline = make_pipeline(vectorizer, model) 
-    class_names = ['analytic', 'continental', 'phenomenology', 'german_idealism', 'plato', 'aristotle', 'empiricism', 'rationalism']
-    explainer = LimeTextExplainer(class_names=class_names)
-    exp = explainer.explain_instance(to_classify, predictor_pipeline.predict_proba, num_features=8, labels=[0, 1, 2, 3, 4, 5, 6, 7])
-    exp.show_in_notebook(text=True)
 
 def make_w2v(series, stopwords=[], size=200, window=5, min_count=5, workers=-1, 
              epochs=20, lowercase=True, sg=0, seed=17, cbow_mean=1, alpha=0.025,
