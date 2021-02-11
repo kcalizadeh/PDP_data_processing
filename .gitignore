@@ -1,1 +1,2 @@
 *.txt
+/Notebooks/__pycache__
