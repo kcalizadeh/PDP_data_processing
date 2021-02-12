@@ -5,6 +5,9 @@ import pickle
 import re
 import json
 
+from gensim.utils import simple_preprocess
+
+
 # gets text from a gutenberg URL
 def get_guten(url):
     # retrieve the source text
@@ -247,7 +250,6 @@ def nn_setup(x, y, max_length=450, tokenizer_name='nn_model.pkl'):
 def set_early_stop(monitor='val_accuracy',patience=3, restore_best_weights=False):
     args = locals()
     return EarlyStopping(**args)
-
 
 
 
